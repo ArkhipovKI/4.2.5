@@ -1,100 +1,71 @@
-import '../scss/style.scss';
+import '../scss/style.scss'
+import { getRepositoriesURL, debounce } from './utils'
 
-const input = document.getElementById('mySearch');
-const body = document.querySelector('body');
-let wrap = document.createElement('div');
-wrap.className = 'autocomplite-wrap';
-input.parentNode.insertBefore(wrap, input);
-wrap.appendChild(input);
+const search = document.getElementById('mySearch')
+const list = document.querySelector('.autocomplete-list')
 
-let list = document.querySelector('.autocomplite-list');
-wrap.appendChild(list)
-
-let rep;
-
-function clear() {
-	list.innerHTML = '';
+const clearResults = () => {
+  list.innerHTML = ''
 }
 
-const AutoComplite = function (arrayItems) {
-	arrayItems.forEach(({ name, owner, stargazers_count }) => {
-
-
-		let item = document.createElement('li');
-		item.className = 'autocomplite-item';
-		item.innerText = name;
-
-		item.addEventListener('click', function getItem(e) {
-			if (e.target === item) {
-				let repItem = document.createElement('div');
-				let images = document.createElement('div');
-
-				images.className = 'images-block';
-				repItem.className = 'added-block';
-
-				repItem.appendChild(images);
-
-				let itemInner = document.createElement('div');
-
-				let crossImgLeftToRight = document.createElement('IMG');
-				let crossImgRightToLeft = document.createElement('IMG');
-
-				crossImgLeftToRight.src = "img/Vector_7.png";
-				crossImgRightToLeft.src = "img/Vector_8.png";
-				crossImgLeftToRight.className = 'crossRight';
-				crossImgRightToLeft.className = 'crossLeft';
-				images.appendChild(crossImgLeftToRight);
-				images.appendChild(crossImgRightToLeft);
-
-				images.addEventListener('click', function deleteRep(e) {
-					repItem.remove();
-					this.removeEventListener('click', deleteRep)
-				})
-				itemInner.className = 'inner-block';
-				repItem.appendChild(itemInner);
-
-				let textBlock = `Name: ${name}` + '<br \>' + `Owner: ${owner.login}` + '<br \>' + `Stars: ${stargazers_count}`
-				itemInner.innerHTML += textBlock;
-				body.appendChild(repItem);
-				input.value = '';
-				list.setAttribute('style', 'display:none');
-				this.removeEventListener('click', getItem)
-				clear();
-			}
-		})
-
-		list.appendChild(item);
-	})
+const clearInfo = () => {
+  const preview = document.querySelector('.repo-preview')
+  if (preview) {
+    preview.remove()
+  }
 }
 
-
-const debounce = (fn, debounceTime) => {
-	let deb;
-	return function () {
-		clearTimeout(deb);
-		deb = setTimeout(() => fn.apply(this, arguments), debounceTime)
-	}
-};
-
-const getResponse = debounce(getUser, 300)
-
-async function getUser(event) {
-	clear();
-
-	list.setAttribute('style', 'display:block');
-	let value = event.target.value;
-
-	if (value.trim() === '') {
-		return
-	}
-
-	const response = await fetch(`https://api.github.com/search/repositories?q=${value}in:name&per_page=5&sort=stars`)
-	rep = (await response.json()).items
-	AutoComplite(rep)
+const generateRepoItem = (name) => {
+  const el = document.createElement('li')
+  el.className = 'autocomplete-item'
+  el.innerText = name
+  return el
 }
 
-input.addEventListener('input', getResponse)
+const generateRepoInfoElement = (name, login, stars) => {
+  const repItem = document.createElement('div')
+  repItem.className = 'repo-preview'
+  const content = document.createElement('p')
+  content.className = 'repo-preview--content'
+  content.innerHTML = `Name: ${name}<br>Owner: ${login}<br>Stars: ${stars}`
+  const closeBtn = document.createElement('button')
+  closeBtn.className = 'repo-preview--btn'
+  closeBtn.setAttribute('type', 'button')
+  closeBtn.innerHTML = '<span>×</span>'
+  closeBtn.addEventListener('click', () => repItem.remove(), { once: true })
+  repItem.append(content, closeBtn)
+  return repItem
+}
 
+const showSearchResult = (repositories) => {
+  clearResults()
+  clearInfo()
 
+  const repositoriesElements = repositories.map(({ name, owner, stargazers_count }) => {
+    const el = generateRepoItem (name)
+    el.addEventListener('click', () => {
+      const repItem = generateRepoInfoElement(name, owner.login, stargazers_count)
+      document.body.appendChild(repItem)
+      search.value = ''
+      clearResults()
+    }, { once: true })
+    return el
+  })
 
+  list.replaceChildren(...repositoriesElements)
+}
 
+const getAndShowRepositories = async () => {
+  const searchQuery = search.value.trim()
+
+  if (searchQuery.length === 0) {
+    clearResults()
+    return
+  }
+
+  const response = await fetch(getRepositoriesURL(searchQuery))
+  const repositories = await response.json()
+  showSearchResult(repositories.items)
+}
+
+search.addEventListener('input', debounce(getAndShowRepositories, 300))

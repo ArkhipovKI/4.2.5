@@ -4,17 +4,17 @@ input {
   padding: 11px;
   border: 1px solid black;
 }
-.autocomplite-wrap {
+.autocomplete-wrap {
   position: relative;
   width: 35%;
-  margin: 0 auto;
+  margin: 0 auto 1rem;
 }
 
-.autocomplite-input {
+.autocomplete-input {
   width: 100%;
 }
 
-.autocomplite-list {
+.autocomplete-list {
   display: block;
   width: -webkit-fill-available;
   top: 100%;
@@ -27,11 +27,11 @@ input {
   display: none;
 }
 
-.autocomplite-wrap.active .autocomplite-list {
+.autocomplete-wrap.active .autocomplete-list {
   display: none;
 }
 
-.autocomplite-item {
+.autocomplete-item {
   background: #E3E3E3;
   border: 2px solid #000000;
   box-sizing: border-box;
@@ -39,42 +39,48 @@ input {
   padding: 9px 13px;
 }
 
-.autocomplite-item:hover, .autocomplite-item.focused {
+.autocomplete-item:hover, .autocomplete-item.focused {
   background-color: #eee;
 }
 
-.added-block {
-  position: relative;
+.repo-preview {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   width: 35%;
-  margin: 0 auto;
-  background: #E27BEB;
-  border: 1px solid #000000;
-  box-sizing: border-box;
-}
-
-.inner-block {
-  padding: 5px;
-  width: 75%;
-  font-family: Roboto;
-  font-style: normal;
-  font-weight: normal;
-  font-size: 24px;
-  line-height: 28px;
-  color: #000000;
-}
-
-.images-block {
-  display: inline-block;
-  position: absolute;
-  top: 28%;
-  right: 13%;
-}
-
-.crossRight {
-  position: absolute;
-  z-index: 10000; 
-}
-.crossLeft {
-  position: absolute;
-  z-index: 10000; 
+  padding: 1rem;
+  background: #828282;
+  border-radius: 15px;
+  margin: 0 auto 1rem;
+  &--content {
+    font-family: sans-serif;
+    margin-right: 1rem;
+    font-size: 24px;
+    font-weight: 500;
+    line-height: 40px;
+    color: white;
+  }
+  &--btn {
+    width: 50px;
+    height: 50px;
+    outline: none;
+    border-radius: 100%;
+    background-color: dodgerblue;
+    color: #eeeeee;
+    border: none;
+    transition: background-color .25s;
+    cursor: pointer;
+    font-size: 32px;
+    position: relative;
+    align-self: flex-start;
+    & > span {
+      position: absolute;
+      left: 50%;
+      top: 52%;
+      transform: translate(-50%, -50%);
+    }
+    &:hover {
+      background-color: lighten(dodgerblue, 10);
+    }
+  }
 }
