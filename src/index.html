@@ -8,22 +8,22 @@
 
 </head>
 <body>
-<script src="https://unpkg.com/regenerator-runtime@0.13.1/runtime.js"></script>
+  <div class="autocomplete-wrap">
+    <input type="text" id="mySearch" placeholder="Поиск.." title="Введите категорию">
+    <div class="autocomplete-list" style="display: none">
 
-<div class="autocomplete-wrap">
-  <input type="text" id="mySearch" placeholder="Поиск.." title="Введите категорию">
-  <div class="autocomplete-list">
-
+    </div>
   </div>
-</div>
 
-<!--    <div class="repo-preview">-->
-<!--      <p class="repo-preview&#45;&#45;content">-->
-<!--        Name: <br>Owner: <br>Stars:-->
-<!--      </p>-->
-<!--      <button class="repo-preview&#45;&#45;btn" type="button">-->
-<!--        <span>×</span>-->
-<!--      </button>-->
-<!--    </div>-->
+  <div class="repo-preview" style="display: none">
+    <p class="repo-preview--content">
+      Name: <br>Owner: <br>Stars:
+    </p>
+    <button class="repo-preview--btn" type="button">
+      <span>×</span>
+    </button>
+  </div>
+
+  <script src="https://unpkg.com/regenerator-runtime@0.13.1/runtime.js"></script>
 </body>
 </html>

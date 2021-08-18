@@ -1,7 +1,7 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
+// const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
   // Входной файл
@@ -82,11 +82,11 @@ module.exports = {
     }),
 
     // Копируем картинки
-    new CopyWebpackPlugin([
-      {
-        from: './src/img',
-        to: 'img',
-      },
-    ])
+    // new CopyWebpackPlugin([
+    //   {
+    //     from: './src/img',
+    //     to: 'img',
+    //   },
+    // ])
   ],
 };
