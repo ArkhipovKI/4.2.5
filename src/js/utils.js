@@ -1,5 +1,7 @@
+export const REPOSITORIES_COUNT = 5
+
 export function getRepositoriesURL (count) {
-  return `https://api.github.com/search/repositories?q=${count}in:name&per_page=5&sort=stars`
+  return `https://api.github.com/search/repositories?q=${count}in:name&per_page=${REPOSITORIES_COUNT}&sort=stars`
 }
 
 export function debounce (fn, debounceTime)  {
